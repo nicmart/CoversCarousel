@@ -1,0 +1,37 @@
+{
+	"name": "covers-carousel",
+	"title": "Covers Carousel",
+	"description": "A death-simple, mobile-friendly cover carousel plugin",
+	"keywords": [
+		"jquery",
+		"carousel",
+		"covers",
+        "covers-carousel"
+	],
+	"version": "0.1",
+	"author": {
+		"name": "Nicolò Martini",
+		"email": "nicmartnic@gmail.com",
+		"url": "http://nicolo.martini.io"
+	},
+	"maintainers": [
+		{
+			"name": "Nicolò Martini",
+			"email": "nicmartnic@gmail.com",
+			"url": "http://nicolo.martini.io"
+		}
+	],
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "http://zenorocha.mit-license.org/"
+		}
+	],
+	"bugs": "https://github.com/nicmart/covers-carousel/issues",
+	"homepage": "http://jqueryboilerplate.com",
+	"docs": "https://github.com/nicmart/covers-carousel#readme",
+	"download": "https://github.com/nicmart/covers-carousel/archive/master.zip",
+	"dependencies": {
+		"jquery": ">=1.4"
+	}
+}

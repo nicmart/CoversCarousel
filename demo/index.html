@@ -1,17 +1,39 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>jQuery Boilerplate</title>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-		<script src="../dist/jquery.boilerplate.js"></script>
-	</head>
-	<body>
-		<script>
-			$(function() {
-				$("#element").defaultPluginName({
-					propertyName: "a custom value"
-				});
-			});
-		</script>
-	</body>
+    <head>
+        <title>jQuery Boilerplate</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <script src="../src/jquery.covers-carousel.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/jquery.covers-carousel.css">
+        <script>
+            $(document).on('ready', function() {
+                $(".carousel-wrapper").coversCarousel();
+            });
+        </script>
+    </head>
+    <body>
+        
+        <div class="carousel-wrapper">
+            <div class="carousel-items">
+                <div class="item"></div>
+                <div class="item smallw"></div>
+                <div class="item smallh"></div>
+                <div class="item"></div>
+                <div class="item smallh smallw"></div>
+                <div class="item"></div>
+                <div class="item largew"></div>
+                <div class="item"></div>
+                <div class="item"></div>
+                <div class="item smallw"></div>
+                <div class="item smallh"></div>
+                <div class="item"></div>
+                <div class="item smallh smallw"></div>
+                <div class="item"></div>
+                <div class="item largew"></div>
+            </div>
+            <a class="next control" href="#">next</a>
+            <a class="prev control" href="#">back</a>
+        </div>
+        <p class="wrapper-length"></p>
+    </body>
 </html>
