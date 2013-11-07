@@ -1,0 +1,29 @@
+.carousel-items {
+    transition: left 1s ease;
+}
+.item {
+    width: 100px;
+    height: 150px;
+    border: 1px solid Black;
+}
+
+.item span {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+.item.smallw { width: 70px; }
+.item.largew { width: 130px; }
+.item.smallh { height: 100px; }
+.item.largeh { height: 170px; }
+
+.carousel-wrapper .control {
+    position: absolute;
+    top: 50%;
+    left: 0;
+}
+
+.carousel-wrapper .control.next {
+    left: inherit;
+    right: 0;
+}
