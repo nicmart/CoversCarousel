@@ -1,6 +1,6 @@
 {
   "name": "covers-carousel",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "homepage": "https://github.com/nicmart/CoversCarousel",
   "authors": [
     "Nicolò Martini <nicmartnic@gmail.com>"
@@ -13,7 +13,7 @@
     "slideshow"
   ],
   "dependencies": {
-		"jquery": "~1.7.0"
+		"jquery": ">=1.7.0"
   },
   "license": "MIT"
 }
