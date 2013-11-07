@@ -32,6 +32,6 @@
 	"docs": "https://github.com/nicmart/covers-carousel#readme",
 	"download": "https://github.com/nicmart/covers-carousel/archive/master.zip",
 	"dependencies": {
-		"jquery": ">=1.4"
+		"jquery": ">=1.7"
 	}
 }
