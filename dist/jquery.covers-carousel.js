@@ -24,7 +24,7 @@
         getOffset: function(element) {
             return parseInt($(element).css("left"));
         },
-        setOffset: function(element, offset) {
+        setOffset: function(element, offset) {alert("him");
             $(element).css({"left": offset + 'px'});
         }
     };
@@ -35,7 +35,7 @@
             var t = $(element).css("transform");
             return parseInt((t.substring(t.indexOf("(") + 1, t.indexOf(")"))).split(', ')[4]);
         },
-        setOffset: function(element, offset) {
+        setOffset: function(element, offset) {alert("me");
             $(element).css("transform", "translateX(" + offset + "px)");
         }
     };
@@ -48,7 +48,7 @@
         itemSelector: ".item",
         nextSelector: ".next",
         prevSelector: ".prev",
-        mover: Mover
+        isTransformSupported: function() { return false; }
     };
 
     // The actual plugin constructor
@@ -78,12 +78,14 @@
             this.element.on('click', this.options.nextSelector, this.moveForward.bind(this));
             
             this.element.on('click', this.options.prevSelector, this.moveBackward.bind(this));
+            
+            this.mover = Mover;
         },
         items: function() {
             return this.element.find(this.options.itemSelector);  
         },
         moveTo: function(elem) {
-            this.options.mover.setOffset(this.innerWrapper, -$(elem).position().left);
+            this.mover.setOffset(this.innerWrapper, -$(elem).position().left);
         },
         moveForward: function(){
             this.moveTo(this.firstNotVisible());
@@ -94,7 +96,7 @@
         firstVisible: function()
         {
             var items = this.items();            
-            var offset = parseInt(this.options.mover.getOffset(this.innerWrapper))
+            var offset = parseInt(this.mover.getOffset(this.innerWrapper))
             
             for (i = 0; i < items.length; i++) {
                 var $item = $(items[i]);
@@ -164,6 +166,32 @@
         var $elem1 = $(elem1), $elem2 = $(elem2);
         
         return $elem2.position().left - $elem1.position().left + $elem2.outerWidth();
+    }
+    
+    // Check if the given css property is supported
+    // Taken from has.js: https://github.com/phiggins42/has.js/blob/master/has.js
+    function cssprop(name)
+    {
+        var g = window,
+            d = isHostType(g, "document") && g.document,
+            el = d && isHostType(d, "createElement") && d.createElement("DiV"),
+        var VENDOR_PREFIXES = ["Webkit", "Moz", "O", "ms", "Khtml"];
+        var supported = false,
+            capitalized = name.charAt(0).toUpperCase() + name.slice(1),
+            length = VENDOR_PREFIXES.length,
+            style = el.style;
+
+        if(typeof style[name] == "string"){
+            supported = true;
+        }else{
+            while(length--){
+                if(typeof style[VENDOR_PREFIXES[length] + capitalized] == "string"){
+                    supported = true;
+                    break;
+                }
+            }
+        }
+        return supported;
     }
 
     // A really lightweight plugin wrapper around the constructor,

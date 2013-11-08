@@ -40,7 +40,7 @@
         itemSelector: ".item",
         nextSelector: ".next",
         prevSelector: ".prev",
-        mover: Mover
+        isTransformSupported: function() { return cssprop("transform"); }
     };
 
     // The actual plugin constructor
@@ -53,6 +53,7 @@
         this.options = $.extend( {}, defaults, options );
         this._defaults = defaults;
         this._name = pluginName;
+        
         this.init();
     }
 
@@ -70,12 +71,14 @@
             this.element.on('click', this.options.nextSelector, this.moveForward.bind(this));
             
             this.element.on('click', this.options.prevSelector, this.moveBackward.bind(this));
+            
+            this.mover = this.options.isTransformSupported() ? TransformationMover : Mover;
         },
         items: function() {
             return this.element.find(this.options.itemSelector);  
         },
         moveTo: function(elem) {
-            this.options.mover.setOffset(this.innerWrapper, -$(elem).position().left);
+            this.mover.setOffset(this.innerWrapper, -$(elem).position().left);
         },
         moveForward: function(){
             this.moveTo(this.firstNotVisible());
@@ -86,7 +89,7 @@
         firstVisible: function()
         {
             var items = this.items();            
-            var offset = parseInt(this.options.mover.getOffset(this.innerWrapper))
+            var offset = parseInt(this.mover.getOffset(this.innerWrapper))
             
             for (i = 0; i < items.length; i++) {
                 var $item = $(items[i]);
@@ -157,6 +160,43 @@
         
         return $elem2.position().left - $elem1.position().left + $elem2.outerWidth();
     }
+    
+    //--------------Compatibility checking--------------------------------------
+    // Check if the given css property is supported
+    // Taken from has.js: https://github.com/phiggins42/has.js/blob/master/has.js
+    function cssprop(name)
+    {
+        var g = window
+            d = isHostType(g, "document") && g.document,
+            el = d && isHostType(d, "createElement") && d.createElement("DiV"),            
+            VENDOR_PREFIXES = ["Webkit", "Moz", "O", "ms", "Khtml"],
+            supported = false,
+            capitalized = name.charAt(0).toUpperCase() + name.slice(1),
+            length = VENDOR_PREFIXES.length,
+            style = el.style;
+
+        if(typeof style[name] == "string"){
+            supported = true;
+        } else {
+            while(length--){
+                if(typeof style[VENDOR_PREFIXES[length] + capitalized] == "string"){
+                    supported = true;
+                    break;
+                }
+            }
+        }
+        return supported;
+    }
+    
+    // Host objects can return type values that are different from their actual
+    // data type. The objects we are concerned with usually return non-primitive
+    // types of object, function, or unknown.
+    function isHostType(object, property){
+        var type = typeof object[property]
+            NON_HOST_TYPES = { "boolean": 1, "number": 1, "string": 1, "undefined": 1 };
+        return type == "object" ? !!object[property] : !NON_HOST_TYPES[type];
+    }
+    //-----------------------------------------------------------------------------
 
     // A really lightweight plugin wrapper around the constructor,
     // preventing against multiple instantiations

@@ -1,5 +1,7 @@
 .carousel-items {
-    transition: left 1s ease;
+    transition-property: -webkit-transform, -mz-transform, -o-transform, -ms-transform, transform, left;
+    transition-duration: 1s;
+    transition-timing-function: ease;
 }
 .item {
     width: 100px;
