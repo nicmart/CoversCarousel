@@ -8,7 +8,7 @@
 		"covers",
         "covers-carousel"
 	],
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"author": {
 		"name": "Nicolò Martini",
 		"email": "nicmartnic@gmail.com",
@@ -28,7 +28,7 @@
 		}
 	],
 	"bugs": "https://github.com/nicmart/covers-carousel/issues",
-	"homepage": "http://jqueryboilerplate.com",
+	"homepage": "https://github.com/nicmart/covers-carousel",
 	"docs": "https://github.com/nicmart/covers-carousel#readme",
 	"download": "https://github.com/nicmart/covers-carousel/archive/master.zip",
 	"dependencies": {

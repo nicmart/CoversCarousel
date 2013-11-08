@@ -1,7 +1,7 @@
 /*
- *  Covers Carousel - v0.1.6
+ *  Covers Carousel - v0.1.7
  *  A death-simple, mobile-friendly cover carousel plugin
- *  http://jqueryboilerplate.com
+ *  https://github.com/nicmart/covers-carousel
  *
  *  Made by Nicolò Martini
  *  Under MIT License
@@ -67,13 +67,7 @@
 
     Plugin.prototype = {
         init: function () {
-            // Place initialization logic here
-            // You already have access to the DOM element and
-            // the options via the instance, e.g. this.element
-            // and this.options
-            // you can add more functions like the one below and
-            // call them like so: this.yourOtherFunction(this.element, this.options).
-            
+
             this.innerWrapper = this.element.find(this.options.innerWrapperSelector);
             
             this.element.on('click', this.options.nextSelector, this.moveForward.bind(this));
@@ -85,21 +79,32 @@
         items: function() {
             return this.element.find(this.options.itemSelector);  
         },
-        moveTo: function(elem) {
+        setStart: function(elem) {
             this.mover.setOffset(this.innerWrapper, -$(elem).position().left);
         },
-        moveForward: function(){
-            this.moveTo(this.firstNotVisible());
+        setEnd: function(elem) {
+            var containerWidth = this.element.width();
+            var newEnd = $(elem);
+            var current = cyclicPrev(newEnd);
+
+            while (isStrictlyAfter(current, newEnd) && width(current, newEnd) <= containerWidth) {
+                current = cyclicPrev(current);
+            }
+
+            this.setStart(cyclicNext(current));
         },
-        moveBackward: function(){
-            this.moveTo(this.backwardFirst());
+        moveForward: function() {
+            this.setEnd(cyclicPrev(this.firstNotVisible(this.firstNotVisible())));
+        },
+        moveBackward: function() {
+            this.setEnd(cyclicPrev(this.firstVisible()));
         },
         firstVisible: function()
         {
             var items = this.items();            
             var offset = parseInt(this.mover.getOffset(this.innerWrapper))
             
-            for (i = 0; i < items.length; i++) {
+            for (var i = 0; i < items.length; i++) {
                 var $item = $(items[i]);
                 if ($item.position().left + offset >= 0)
                     return $item;
@@ -107,36 +112,24 @@
             
             return items[0];
         },
-        firstNotVisible: function()
+        firstNotVisible: function(from)
         {
             var containerWidth = this.element.width();
-            var $first = $(this.firstVisible());
-            var current = cyclicNext($first);
+            var $from = $(from || this.firstVisible());
+            var current = cyclicNext($from);
             
-            while (isStrictlyAfter($first, current) && width($first, current) <= containerWidth) {
+            while (isStrictlyAfter($from, current) && width($from, current) <= containerWidth) {
                 current = cyclicNext(current);
             }
             
             return current;
-        },
-        backwardFirst: function()
-        {
-            var containerWidth = this.element.width();
-            var newEnd = cyclicPrev(this.firstVisible())
-            var current = cyclicPrev(newEnd)
-            
-            while (isStrictlyAfter(current, newEnd) && width(current, newEnd) <= containerWidth) {
-                current = cyclicPrev(current);
-            }
-            
-            return cyclicNext(current);
         }
     };
     
     // Private methods
     function cyclicNext(elem)
     {
-        $elem = $(elem);
+        var $elem = $(elem);
         if ($elem.next().length)
             return $elem.next();
             
@@ -145,7 +138,7 @@
 
     function cyclicPrev(elem)
     {
-        $elem = $(elem);
+        var $elem = $(elem);
         if ($elem.prev().length)
             return $elem.prev();
             
@@ -174,7 +167,7 @@
     // Taken from has.js: https://github.com/phiggins42/has.js/blob/master/has.js
     function cssprop(name)
     {
-        var g = window
+        var g = window,
             d = isHostType(g, "document") && g.document,
             el = d && isHostType(d, "createElement") && d.createElement("DiV"),            
             VENDOR_PREFIXES = ["Webkit", "Moz", "O", "ms", "Khtml"],
@@ -200,7 +193,7 @@
     // data type. The objects we are concerned with usually return non-primitive
     // types of object, function, or unknown.
     function isHostType(object, property){
-        var type = typeof object[property]
+        var type = typeof object[property],
             NON_HOST_TYPES = { "boolean": 1, "number": 1, "string": 1, "undefined": 1 };
         return type == "object" ? !!object[property] : !NON_HOST_TYPES[type];
     }
