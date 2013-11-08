@@ -52,9 +52,15 @@
             
             this.innerWrapper = this.element.find(this.options.innerWrapperSelector);
             
-            this.element.on('click', this.options.nextSelector, this.moveForward.bind(this));
+            this.element.on('click', this.options.nextSelector, function(e) {
+                e.preventDefault();
+                this.moveForward();
+            });
             
-            this.element.on('click', this.options.prevSelector, this.moveBackward.bind(this));
+            this.element.on('click', this.options.prevSelector, function(e) {
+                e.preventDefault();
+                this.moveBackward();
+            });
         },
         items: function() {
             return this.element.find(this.options.itemSelector);  
