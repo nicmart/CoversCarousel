@@ -1,5 +1,5 @@
 /*
- *  Covers Carousel - v0.1
+ *  Covers Carousel - v0.1.4
  *  A death-simple, mobile-friendly cover carousel plugin
  *  http://jqueryboilerplate.com
  *
@@ -18,6 +18,28 @@
     // window and document are passed through as local variable rather than global
     // as this (slightly) quickens the resolution process and can be more efficiently
     // minified (especially when both are regularly referenced in your plugin).
+    
+    // Mover classes are responsible for moving the items container.
+    var Mover = {
+        getOffset: function(element) {
+            return parseInt($(element).css("left"));
+        },
+        setOffset: function(element, offset) {
+            $(element).css({"left": offset + 'px'});
+        }
+    };
+    
+    var TransformationMover = {
+        getOffset: function(element) {
+            //retrieve the first value of the transformation matrix ("matrix(a, b, c, d, e, f)")
+            var t = $(element).css("transform");
+            return parseInt((t.substring(t.indexOf("(") + 1, t.indexOf(")"))).split(', ')[4]);
+        },
+        setOffset: function(element, offset) {
+            $(element).css("transform", "translateX(" + offset + "px)");
+        }
+    };
+    
 
     // Create the defaults once
     var pluginName = "coversCarousel";
@@ -25,7 +47,8 @@
         innerWrapperSelector: ".carousel-items",
         itemSelector: ".item",
         nextSelector: ".next",
-        prevSelector: ".prev"
+        prevSelector: ".prev",
+        mover: Mover
     };
 
     // The actual plugin constructor
@@ -52,21 +75,15 @@
             
             this.innerWrapper = this.element.find(this.options.innerWrapperSelector);
             
-            this.element.on('click', this.options.nextSelector, function(e) {
-                e.preventDefault();
-                this.moveForward();
-            });
+            this.element.on('click', this.options.nextSelector, this.moveForward.bind(this));
             
-            this.element.on('click', this.options.prevSelector, function(e) {
-                e.preventDefault();
-                this.moveBackward();
-            });
+            this.element.on('click', this.options.prevSelector, this.moveBackward.bind(this));
         },
         items: function() {
             return this.element.find(this.options.itemSelector);  
         },
         moveTo: function(elem) {
-            this.innerWrapper.css({"left": -$(elem).position().left + 'px'})   
+            this.options.mover.setOffset(this.innerWrapper, -$(elem).position().left);
         },
         moveForward: function(){
             this.moveTo(this.firstNotVisible());
@@ -77,7 +94,7 @@
         firstVisible: function()
         {
             var items = this.items();            
-            var offset = parseInt(this.innerWrapper.css("left"))
+            var offset = parseInt(this.options.mover.getOffset(this.innerWrapper))
             
             for (i = 0; i < items.length; i++) {
                 var $item = $(items[i]);
